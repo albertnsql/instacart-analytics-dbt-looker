@@ -7,7 +7,6 @@ select
     p.product_name,
     a.aisle_name,
     d.department_name,
-
     -- deterministic price (stable across rebuilds)
     2 + (p.product_id % 18) as product_price
 

@@ -36,7 +36,7 @@ joined as (
         p.product_price
 
     from order_items oi
-    join orders o
+    inner join orders o
         on oi.order_id = o.order_id
     left join {{ ref('dim_product') }} p
         on oi.product_id = p.product_id
@@ -51,7 +51,6 @@ select
     reordered,
     quantity,
     product_price,
-
     quantity * product_price as revenue,
     quantity * product_price * 0.6 as cost,
     quantity * product_price * 0.4 as margin
