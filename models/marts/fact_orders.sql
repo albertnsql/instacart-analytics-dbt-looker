@@ -22,7 +22,7 @@ aggregated as (
         sum(cost) as order_cost,
         sum(margin) as order_margin,
 
-        avg(product_price) as avg_item_price,
+        avg(unit_price) as avg_item_price,
         avg(reordered) as reorder_ratio
 
     from order_items

@@ -33,7 +33,7 @@ joined as (
         o.order_date,
         oi.reordered,
         oi.quantity,
-        p.product_price
+        p.product_price as unit_price
 
     from order_items oi
     inner join orders o
@@ -41,21 +41,29 @@ joined as (
     left join {{ ref('dim_product') }} p
         on oi.product_id = p.product_id
 
+),
+
+calculated as (
+
+    select
+        order_id,
+        customer_id,
+        product_id,
+        order_date,
+        reordered,
+        quantity,
+        unit_price,
+
+        quantity * unit_price as revenue,
+        quantity * unit_price * 0.6 as cost,
+        quantity * unit_price * 0.4 as margin
+
+    from joined
+
 )
 
-select
-    order_id,
-    customer_id,
-    product_id,
-    order_date,
-    reordered,
-    quantity,
-    product_price,
-    quantity * product_price as revenue,
-    quantity * product_price * 0.6 as cost,
-    quantity * product_price * 0.4 as margin
-
-from joined
+select *
+from calculated
 
 {% if is_incremental() %}
 where order_date > (select max(order_date) from {{ this }})
