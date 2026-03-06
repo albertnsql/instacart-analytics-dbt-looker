@@ -1,98 +1,100 @@
-# 🛒 Instacart Analytics Warehouse  
-**Snowflake + dbt End-to-End Analytics Engineering Project**
+# dbt Data Warehouse Models
 
-##  Overview
+This directory contains the dbt project responsible for transforming raw Instacart data into analytics-ready warehouse tables.
 
-This project builds a production-style ecommerce analytics warehouse using Snowflake and dbt.  
-Raw Instacart transactional data is transformed into a scalable star schema supporting:
+The dbt project follows a layered modeling approach:
 
-- Customer retention & cohort analysis  
-- Revenue & profitability modeling  
-- Basket and reorder behavior analysis  
-- RFM customer segmentation  
-
-The architecture follows modern analytics engineering best practices with layered transformations and incremental fact modeling.
-
----
-
-## Architecture
-
-RAW → STAGING → INTERMEDIATE → MART → BI
-
-**RAW**  
-Source data loaded into Snowflake without transformation.
-
-**STAGING (Views)**  
-Column standardization and cleaning using `source()` references.
-
-**INTERMEDIATE (Views)**  
-Cumulative customer timeline logic and synthetic `order_date` generation.
-
-**MART (Tables / Incremental)**  
-Star schema with business-ready fact and dimension models.
+Raw Data
+↓
+Staging Models
+↓
+Intermediate Models
+↓
+Analytics Marts
 
 ---
 
-## ⭐ Data Model
+## Model Layers
 
-### Fact Tables
+### Staging Layer
 
-**fact_order_items (Incremental)**  
-Grain: 1 row per product per order  
-- revenue  
-- cost  
-- margin  
-- reordered flag  
+Located in:
 
-**fact_orders**  
-Grain: 1 row per order  
-- total_items  
-- order_revenue  
-- avg_item_price  
-- reorder_ratio  
+```
+models/staging/
+```
 
----
+Purpose:
 
-### Dimension Tables
+* Clean raw source tables
+* Standardize column names
+* Apply basic transformations
 
-**dim_product** – product, aisle, department  
-**dim_customer** – first/last order, lifetime metrics  
-**dim_date** – calendar date spine  
+Examples:
+
+* stg_orders
+* stg_products
+* stg_order_products_prior
 
 ---
 
-## 📊 Analytical Models
+### Intermediate Layer
 
-- **customer_cohorts** → monthly retention analysis  
-- **customer_rfm** → recency, frequency, monetary segmentation  
-- **product_performance** → revenue & reorder analysis by product  
+Located in:
 
----
+```
+models/intermediate/
+```
 
-## 🚀 Key KPIs Enabled
+Purpose:
 
-- Average Order Value (AOV)  
-- Customer Lifetime Value (LTV)  
-- Monthly Retention Rate  
-- Reorder Ratio  
-- Revenue by Department  
-- Basket Size Analysis  
+* Build reusable transformations
+* Combine staging models
+* Prepare logic used by marts
 
----
+Example:
 
-## ⚙ Technical Highlights
-
-- Layered warehouse architecture  
-- Incremental fact modeling with composite keys  
-- Window functions for cumulative logic  
-- Explicit grain definition per model  
-- Business-oriented star schema design  
+* int_orders_enriched
 
 ---
 
-## 🛠 Tech Stack
+### Mart Layer
 
-- Snowflake  
-- dbt  
-- SQL (Window Functions, Incremental Modeling)  
-- Star Schema Design  
+Located in:
+
+```
+models/marts/
+```
+
+Purpose:
+
+* Create analytics-ready tables used by BI tools.
+
+Key marts:
+
+Fact Tables
+
+* fact_orders
+* fact_order_items
+
+Dimension Tables
+
+* dim_customer
+* dim_product
+* dim_date
+
+Analytical Models
+
+* product_performance
+* customer_rfm
+* customer_cohorts
+
+---
+
+## dbt Features Used
+
+* Incremental models for large fact tables
+* Modular model layering
+* YAML documentation
+* Reusable transformations
+* Star schema design
