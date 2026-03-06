@@ -2,6 +2,9 @@
 
 This repository demonstrates an **end-to-end analytics engineering workflow** built using the Instacart dataset.
 
+* 📧 Email: albertnsql@gmail.com
+* 💼 LinkedIn: https://www.linkedin.com/in/albertn97
+
 The project models **orders, products, and customer behavior** using a modern analytics stack and implements a semantic layer for business-ready analytics.
 
 ## Stack
