@@ -1,27 +1,45 @@
 # dbt Data Warehouse Models
 
-This directory contains the dbt project responsible for transforming raw Instacart data into analytics-ready warehouse tables.
+This directory contains the **dbt project responsible for transforming raw Instacart data into analytics-ready warehouse models**.
 
-The dbt project follows a layered modeling approach:
+The dbt project follows a layered modeling approach that improves **data quality, maintainability, and reusability**.
 
-Raw Data
-↓
-Staging Models
-↓
-Intermediate Models
-↓
-Analytics Marts
+Raw Data → Staging Models → Intermediate Models → Mart Models
 
 ---
 
-## Model Layers
+# dbt Transformation Pipeline
 
-### Staging Layer
+```mermaid
+flowchart LR
 
-Located in:
+A[Raw Instacart Tables] --> B[Staging Models]
+
+B --> C[Intermediate Models]
+
+C --> D[Fact Tables]
+C --> E[Dimension Tables]
+
+D --> F[Analytics Marts]
+E --> F
+```
+
+This layered approach ensures:
+
+* Clear separation of transformations
+* Reusable data models
+* Scalable analytics pipelines
+
+---
+
+# Model Layers
+
+## Staging Layer
+
+Location:
 
 ```
-models/staging/
+models/staging
 ```
 
 Purpose:
@@ -35,22 +53,24 @@ Examples:
 * stg_orders
 * stg_products
 * stg_order_products_prior
+* stg_departments
+* stg_aisles
 
 ---
 
-### Intermediate Layer
+## Intermediate Layer
 
-Located in:
+Location:
 
 ```
-models/intermediate/
+models/intermediate
 ```
 
 Purpose:
 
 * Build reusable transformations
 * Combine staging models
-* Prepare logic used by marts
+* Prepare datasets for analytics marts
 
 Example:
 
@@ -58,32 +78,32 @@ Example:
 
 ---
 
-### Mart Layer
+## Mart Layer
 
-Located in:
+Location:
 
 ```
-models/marts/
+models/marts
 ```
 
 Purpose:
 
 * Create analytics-ready tables used by BI tools.
 
-Key marts:
+Key models:
 
-Fact Tables
+### Fact Tables
 
 * fact_orders
 * fact_order_items
 
-Dimension Tables
+### Dimension Tables
 
 * dim_customer
 * dim_product
 * dim_date
 
-Analytical Models
+### Analytical Models
 
 * product_performance
 * customer_rfm
@@ -91,10 +111,35 @@ Analytical Models
 
 ---
 
-## dbt Features Used
+# dbt Model Dependencies
 
+```mermaid
+flowchart TD
+
+stg_orders --> int_orders_enriched
+
+stg_products --> dim_product
+
+int_orders_enriched --> fact_orders
+
+stg_order_products_prior --> fact_order_items
+dim_product --> fact_order_items
+fact_orders --> fact_order_items
+
+fact_order_items --> product_performance
+fact_orders --> customer_rfm
+fact_orders --> customer_cohorts
+```
+
+---
+
+# Key dbt Features Used
+
+* Layered data modeling (staging → intermediate → marts)
 * Incremental models for large fact tables
-* Modular model layering
-* YAML documentation
-* Reusable transformations
-* Star schema design
+* Modular SQL transformations
+* Reusable analytics marts
+* Documentation via YAML schema files
+
+---
+
