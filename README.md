@@ -22,7 +22,7 @@ The goal of this project is to design a **scalable analytics warehouse and seman
 
 * Built an **end-to-end analytics engineering pipeline** using Snowflake, dbt, and LookML
 * Designed a **star schema data warehouse** with fact tables, dimension tables, and analytical marts
-* Implemented advanced analytics models including **Customer RFM segmentation** and **Customer Cohort retention analysis**
+* Implemented advanced analytics models including  **Customer RFM segmentation** and **Customer Cohort retention analysis**
 * Developed a **LookML semantic layer** with reusable explores, dimensions, and business metrics
 * Modeled **revenue, product performance, customer behavior, and retention analytics**
 * Structured the repository following a **modern analytics engineering project layout**
